@@ -51,6 +51,16 @@ if (
 	class Main extends Tribe__Extension {
 
 		/**
+		 * Setup the Extension's properties.
+		 *
+		 * The `Tribe__Events__Event_Cleaner_Scheduler` class didn't exist before this version.
+		 * This always executes even if the required plugins are not present.
+		 */
+		public function construct() {
+			$this->add_required_plugin( 'Tribe__Events__Main', '4.6.13' );
+		}
+
+		/**
 		 * Extension initialization and hooks.
 		 */
 		public function init() {
