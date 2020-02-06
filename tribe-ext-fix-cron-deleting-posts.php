@@ -72,7 +72,7 @@ if (
 			}
 
 			// Insert filter and action hooks here
-			add_filter( 'thing_we_are_filtering', [ $this, 'my_custom_function' ] );
+			add_filter( 'tribe_events_delete_old_events_sql', [ $this, 'query_fix' ] );
 		}
 
 		/**
@@ -108,10 +108,16 @@ if (
 		}
 
 		/**
-		 * Include a docblock for every class method and property.
+		 * Correct the query's Post Type placeholder.
+		 *
+		 * @see \Tribe__Events__Event_Cleaner_Scheduler::select_events_to_purge()
+		 *
+		 * @param string $sql The query statement.
+		 *
+		 * @return string
 		 */
-		public function my_custom_function() {
-			// do your custom stuff
+		public function query_fix( $sql ) {
+			return (string) str_replace( 'post_type = %d', 'post_type = %s', $sql );
 		}
 
 	} // end class
