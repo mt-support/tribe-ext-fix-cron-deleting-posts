@@ -3,7 +3,7 @@
  * Plugin Name:       The Events Calendar Extension: Fix Cron Deleting Posts
  * Plugin URI:        https://support.theeventscalendar.com/
  * GitHub Plugin URI: https://github.com/mt-support/tribe-ext-fix-cron-deleting-posts
- * Description:       [Extension Description]
+ * Description:       Fix for the unlikely issue where cron deletes posts when it shouldn't due to incorrect SQL placeholders.
  * Version:           1.0.0
  * Extension Class:   Tribe\Extensions\Fix_Cron_Deleting_Posts\Main
  * Author:            Modern Tribe, Inc.
@@ -51,6 +51,16 @@ if (
 	class Main extends Tribe__Extension {
 
 		/**
+		 * Setup the Extension's properties.
+		 *
+		 * The `Tribe__Events__Event_Cleaner_Scheduler` class didn't exist before this version.
+		 * This always executes even if the required plugins are not present.
+		 */
+		public function construct() {
+			$this->add_required_plugin( 'Tribe__Events__Main', '4.6.13' );
+		}
+
+		/**
 		 * Extension initialization and hooks.
 		 */
 		public function init() {
@@ -62,7 +72,7 @@ if (
 			}
 
 			// Insert filter and action hooks here
-			add_filter( 'thing_we_are_filtering', [ $this, 'my_custom_function' ] );
+			add_filter( 'tribe_events_delete_old_events_sql', [ $this, 'query_fix' ] );
 		}
 
 		/**
@@ -98,10 +108,16 @@ if (
 		}
 
 		/**
-		 * Include a docblock for every class method and property.
+		 * Correct the query's Post Type placeholder.
+		 *
+		 * @see \Tribe__Events__Event_Cleaner_Scheduler::select_events_to_purge()
+		 *
+		 * @param string $sql The query statement.
+		 *
+		 * @return string
 		 */
-		public function my_custom_function() {
-			// do your custom stuff
+		public function query_fix( $sql ) {
+			return (string) str_replace( 'post_type = %d', 'post_type = %s', $sql );
 		}
 
 	} // end class
