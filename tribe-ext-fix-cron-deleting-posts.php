@@ -3,7 +3,7 @@
  * Plugin Name:       The Events Calendar Extension: Fix Cron Deleting Posts
  * Plugin URI:        https://support.theeventscalendar.com/
  * GitHub Plugin URI: https://github.com/mt-support/tribe-ext-fix-cron-deleting-posts
- * Description:       [Extension Description]
+ * Description:       Fix for the unlikely issue where cron deletes posts when it shouldn't due to incorrect SQL placeholders.
  * Version:           1.0.0
  * Extension Class:   Tribe\Extensions\Fix_Cron_Deleting_Posts\Main
  * Author:            Modern Tribe, Inc.
